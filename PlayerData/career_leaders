@@ -1,0 +1,6 @@
+from nba_api.stats.endpoints import alltimeleadersgrids
+
+alltime_data = alltimeleadersgrids.AllTimeLeadersGrids()
+
+alltime_data = alltime_data.get_data_frames()[0]
+print(alltime_data)
