@@ -1,12 +1,11 @@
 from nba_api.stats.endpoints import leaguedashteamstats
-from constants import team_ids, past_ten_seasons
-import pandas
+from constants import team_ids, all_seasons
 
 temp_season_summary = []
 
 total_data = []
 
-for season in past_ten_seasons:
+for season in all_seasons:
     for team in team_ids:
         try:
             team_stats = leaguedashteamstats.LeagueDashTeamStats(
