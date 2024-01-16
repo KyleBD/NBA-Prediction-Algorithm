@@ -1,6 +1,28 @@
 from nba_api.stats.endpoints import alltimeleadersgrids
+from nba_api.stats.endpoints import playergamelog
 
-alltime_data = alltimeleadersgrids.AllTimeLeadersGrids()
+def get_carrer_data():
+    #Currently returning data frame but change based off what is necissary.
+    alltime_data = alltimeleadersgrids.AllTimeLeadersGrids()
+    alltime_data = alltime_data.get_data_frames()[0]
+    return alltime_data
 
-alltime_data = alltime_data.get_data_frames()[0]
-print(alltime_data)
+class PlayerData:
+    points = 0
+    plus_minus = 0
+    tov = 0
+    assists = 0
+
+    def __init__(self) -> None:
+        pass
+
+    def get_player_stats(self, player_id, season):
+        player_log = playergamelog.PlayerGameLog(player_id=player_id, season=season)
+        player_log_data = player_log.get_data_frames()[0]
+        self.points = player_log_data['PTS']
+        self.plus_minus = player_log_data['PLUS_MINUS']
+        self.tov = player_log_data['TOV']
+        self.assists = player_log_data['AST']
+
+        return player_log_data
+
