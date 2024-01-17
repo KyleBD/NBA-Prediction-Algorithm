@@ -7,7 +7,7 @@ def get_carrer_data():
     alltime_data = alltime_data.get_data_frames()[0]
     return alltime_data
 
-class PlayerData:
+class CurrentSeasonData:
     points = 0
     plus_minus = 0
     tov = 0
