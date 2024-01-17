@@ -12,6 +12,7 @@ class CurrentSeasonData:
     plus_minus = 0
     tov = 0
     assists = 0
+    min_played = 0
 
     def __init__(self) -> None:
         pass
