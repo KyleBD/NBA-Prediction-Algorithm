@@ -25,10 +25,15 @@ class CurrentSeasonData:
         self.plus_minus = player_log_data['PLUS_MINUS']
         self.tov = player_log_data['TOV']
         self.assists = player_log_data['AST']
+        self.fg_attempted = player_log_data['FGA']
+        self.ft_attempted = player_log_data['FTA']
 
         return player_log_data
     
+    def calc_true_shooting(self):
+        self.true_shooting = self.points / (2*(self.fg_attempted + 0.44*self.ft_attempted))
 
     def calc_player_score(self):
+        elo = self.true_shooting #+... (tbd)
         #Add future algo to calc player score
 
