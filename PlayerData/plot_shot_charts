@@ -1,0 +1,19 @@
+from nba_api.stats.endpoints import shotchartdetail
+import matplotlib.pyplot as plt
+
+def get_player_shot_chart(player_id, season, team_id):
+    shot_chart = shotchartdetail.ShotChartDetail(player_id=player_id, season_nullable= season, team_id= team_id)
+    shot_chart_data = shot_chart.get_data_frames()[0]
+    return shot_chart_data
+
+
+# Get LeBron James's shot chart
+def trigger_chart(player_id, season, team_id):
+    player_chart = get_player_shot_chart(player_id, season, team_id)
+    plt.scatter(player_chart['LOC_X'], player_chart['LOC_Y'], c=player_chart['SHOT_MADE_FLAG'], cmap='coolwarm')
+    plt.title( f"{player_id} Shot Chart (2022-23 Season)")
+    plt.xlabel("X Coordinate")
+    plt.ylabel("Y Coordinate")
+    plt.show()
+
+
