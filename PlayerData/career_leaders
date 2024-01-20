@@ -13,6 +13,7 @@ class CurrentSeasonData:
     tov = 0
     assists = 0
     min_played = 0
+    true_shooting = 0
 
     def __init__(self) -> None:
         pass
@@ -26,4 +27,8 @@ class CurrentSeasonData:
         self.assists = player_log_data['AST']
 
         return player_log_data
+    
+
+    def calc_player_score(self):
+        #Add future algo to calc player score
 
