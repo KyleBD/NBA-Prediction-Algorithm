@@ -1,5 +1,6 @@
 from nba_api.stats.endpoints import alltimeleadersgrids
 from nba_api.stats.endpoints import playergamelog
+from nba_api.stats.endpoints import playerdashboardbyclutch
 
 def get_carrer_data():
     #Currently returning data frame but change based off what is necissary.
@@ -15,10 +16,11 @@ class CurrentSeasonData:
     min_played = 0
     true_shooting = 0
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, player_id, season) -> None:
+        self.get_player_stats(player_id, season)
+        self.calc_true_shooting()
 
-    def get_player_stats(self, player_id, season):
+    def get_player_stats(self, player_id, season) -> None:
         player_log = playergamelog.PlayerGameLog(player_id=player_id, season=season)
         player_log_data = player_log.get_data_frames()[0]
         self.points = player_log_data['PTS']
@@ -28,12 +30,34 @@ class CurrentSeasonData:
         self.fg_attempted = player_log_data['FGA']
         self.ft_attempted = player_log_data['FTA']
 
-        return player_log_data
     
-    def calc_true_shooting(self):
+    def calc_true_shooting(self) -> None:
         self.true_shooting = self.points / (2*(self.fg_attempted + 0.44*self.ft_attempted))
 
     def calc_player_score(self):
         elo = self.true_shooting #+... (tbd)
         #Add future algo to calc player score
+
+
+
+#This section will be used to get players data specifically in the last 10 seconds of games
+class ClutchData:
+    def __init__(self, player_id) -> None:
+        self.get_player_advanced_stats_offensive(player_id)
+
+    def get_player_advanced_stats_offensive(self, player_id) -> None:
+        advanced_stats = playerdashboardbyclutch.PlayerDashboardByClutch(player_id=player_id)
+        advanced_stats_data = advanced_stats.get_data_frames()[0]
+        #use the FGA values to get rid of players who have taken under an certain amount of shots if needed
+        self.w_pct = advanced_stats_data["W_PCT"]
+        self.fga = advanced_stats_data["FGA"]
+        self.fg_pct = advanced_stats_data["FG_PCT"]
+        self.three_pt_fga = advanced_stats_data["FG3A"]
+        self.three_fg_pct = advanced_stats_data["FG3_PCT"]
+        self.fta = advanced_stats_data["FTA"]
+        self.ft_pct = advanced_stats_data["FT_PCT"]
+    #add same thing for defensive stats
+
+
+    
 
