@@ -56,7 +56,12 @@ class ClutchData:
         self.three_fg_pct = advanced_stats_data["FG3_PCT"]
         self.fta = advanced_stats_data["FTA"]
         self.ft_pct = advanced_stats_data["FT_PCT"]
-    #add same thing for defensive stats
+
+    def get_player_advanced_stats_deffensive(self, player_id) -> None:
+        advanced_stats = playerdashboardbyclutch.PlayerDashboardByClutch(player_id=player_id)
+        advanced_stats_data = advanced_stats.get_data_frames()[0]
+        self.steals = advanced_stats_data["STL"]
+        self.blocks = advanced_stats_data["BLK"]
 
 
     
