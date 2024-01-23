@@ -9,8 +9,6 @@ def get_carrer_data():
     return alltime_data
 
 class CurrentSeasonData:
-
-
     def __init__(self, player_id, season) -> None:
         self.get_player_stats(player_id, season)
         self.calc_true_shooting()
@@ -18,20 +16,28 @@ class CurrentSeasonData:
     def get_player_stats(self, player_id, season) -> None:
         player_log = playergamelog.PlayerGameLog(player_id=player_id, season=season)
         player_log_data = player_log.get_data_frames()[0]
+        self.games_played = len(player_log_data)
+        self.games_player = player_log_data['']
         self.points = player_log_data['PTS']
         self.plus_minus = player_log_data['PLUS_MINUS']
         self.tov = player_log_data['TOV']
         self.assists = player_log_data['AST']
         self.fg_attempted = player_log_data['FGA']
         self.ft_attempted = player_log_data['FTA']
+        self.ft_percentage = player_log_data['FT_PCT']
+        self.three_fg_pct = player_log_data['FG3_PCT']
+        self.fg_pct = player_log_data['FG_PCT']
+        self.assists_per_game = self.assists / self.games_played
+        self.tov_per_game = self.tov / self.games_played
 
     
     def calc_true_shooting(self) -> None:
         self.true_shooting = self.points / (2*(self.fg_attempted + 0.44*self.ft_attempted))
 
     def calc_player_score(self):
-        self.offensive_elo = self.true_shooting #+... (tbd)
-        #Add future algo to calc player score
+        self.offensive_elo = (0.5*self.true_shooting +  0.2*(self.assists_per_game) 
+        - 0.15*(self.tov_per_game) + 0.15*(self.three_fg_pct)
+        )
 
 
 
@@ -61,7 +67,12 @@ class ClutchData:
     
     def calculate_defensive_clutch(self) -> None:
         self.defensive_elo = 2*(self.steals) + self.blocks
-    
+
+    def calculate_offensive_clutch(self) -> None:
+        self.offensive_elo = 0.1*(self.w_pct) + 0.5*(self.fg_pct) + 0.2(self.three_fg_pct) + 0.1(self.ft_pct)
+
+
+
 
 
     
