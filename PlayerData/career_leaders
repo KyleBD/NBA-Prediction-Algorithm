@@ -9,12 +9,7 @@ def get_carrer_data():
     return alltime_data
 
 class CurrentSeasonData:
-    points = 0
-    plus_minus = 0
-    tov = 0
-    assists = 0
-    min_played = 0
-    true_shooting = 0
+
 
     def __init__(self, player_id, season) -> None:
         self.get_player_stats(player_id, season)
@@ -35,7 +30,7 @@ class CurrentSeasonData:
         self.true_shooting = self.points / (2*(self.fg_attempted + 0.44*self.ft_attempted))
 
     def calc_player_score(self):
-        elo = self.true_shooting #+... (tbd)
+        self.offensive_elo = self.true_shooting #+... (tbd)
         #Add future algo to calc player score
 
 
@@ -44,6 +39,7 @@ class CurrentSeasonData:
 class ClutchData:
     def __init__(self, player_id) -> None:
         self.get_player_advanced_stats_offensive(player_id)
+        self.get_player_advanced_stats_deffensive(player_id)
 
     def get_player_advanced_stats_offensive(self, player_id) -> None:
         advanced_stats = playerdashboardbyclutch.PlayerDashboardByClutch(player_id=player_id)
@@ -62,6 +58,10 @@ class ClutchData:
         advanced_stats_data = advanced_stats.get_data_frames()[0]
         self.steals = advanced_stats_data["STL"]
         self.blocks = advanced_stats_data["BLK"]
+    
+    def calculate_defensive_clutch(self) -> None:
+        self.defensive_elo = 2*(self.steals) + self.blocks
+    
 
 
     
