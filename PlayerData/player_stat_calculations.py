@@ -2,7 +2,7 @@ from nba_api.stats.endpoints import alltimeleadersgrids
 from nba_api.stats.endpoints import playergamelog
 from nba_api.stats.endpoints import playerdashboardbyclutch
 
-def get_carrer_data():
+def get_carear_data():
     #Currently returning data frame but change based off what is necissary.
     alltime_data = alltimeleadersgrids.AllTimeLeadersGrids()
     alltime_data = alltime_data.get_data_frames()[0]
