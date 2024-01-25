@@ -10,33 +10,40 @@ def get_carrer_data():
 
 class CurrentSeasonData:
     def __init__(self, player_id, season) -> None:
-        self.get_player_stats(player_id, season)
-        self.calc_true_shooting()
+        self.get_player_stats_offence(player_id, season)
+        self.get_player_stats_defence(player_id, season)
 
-    def get_player_stats(self, player_id, season) -> None:
+    def get_player_stats_offence(self, player_id, season) -> None:
         player_log = playergamelog.PlayerGameLog(player_id=player_id, season=season)
         player_log_data = player_log.get_data_frames()[0]
         self.games_played = len(player_log_data)
-        self.games_player = player_log_data['']
-        self.points = player_log_data['PTS']
-        self.plus_minus = player_log_data['PLUS_MINUS']
-        self.tov = player_log_data['TOV']
-        self.assists = player_log_data['AST']
-        self.fg_attempted = player_log_data['FGA']
-        self.ft_attempted = player_log_data['FTA']
-        self.ft_percentage = player_log_data['FT_PCT']
-        self.three_fg_pct = player_log_data['FG3_PCT']
-        self.fg_pct = player_log_data['FG_PCT']
-        self.assists_per_game = self.assists / self.games_played
-        self.tov_per_game = self.tov / self.games_played
+        self.points_per_game = player_log_data['PTS'].mean()
+        self.plus_minus_per_game = player_log_data['PLUS_MINUS'].mean()
+        self.tov_per_game = player_log_data['TOV'].mean()
+        self.assists_per_game = player_log_data['AST'].mean()
+        self.fg_attempted_per_game = player_log_data['FGA'].mean()
+        self.ft_attempted_per_game = player_log_data['FTA'].mean()
+        self.ft_percentage_per_game = player_log_data['FT_PCT'].mean()
+        self.three_fg_pct_per_game = player_log_data['FG3_PCT'].mean()
+        self.fg_pct_per_game = player_log_data['FG_PCT'].mean()
+        self.total_points = self.points_per_game * self.games_played
+        self.fg_attempted = self.fg_attempted_per_game * self.games_played
+        self.ft_attempted = self.ft_attempted_per_game* self.games_played
+        self.calc_true_shooting()
+        self.calc_player_score()
 
+    def get_player_stats_defence(self, player_id, season) -> None:
+        player_log = playergamelog.PlayerGameLog(player_id=player_id, season=season)
+        player_log_data = player_log.get_data_frames()[0]
+        self.blocks = player_log_data['BLK'].mean()
+        self.steals = player_log_data['STL'].mean()
     
     def calc_true_shooting(self) -> None:
-        self.true_shooting = self.points / (2*(self.fg_attempted + 0.44*self.ft_attempted))
+        self.true_shooting = self.total_points / (2*(self.fg_attempted + 0.44*self.ft_attempted))
 
     def calc_player_score(self):
         self.offensive_elo = (0.5*self.true_shooting +  0.2*(self.assists_per_game) 
-        - 0.15*(self.tov_per_game) + 0.15*(self.three_fg_pct)
+        - 0.15*(self.tov_per_game) + 0.15*(self.three_fg_pct_per_game)
         )
 
 
@@ -51,27 +58,24 @@ class ClutchData:
         advanced_stats = playerdashboardbyclutch.PlayerDashboardByClutch(player_id=player_id)
         advanced_stats_data = advanced_stats.get_data_frames()[0]
         #use the FGA values to get rid of players who have taken under an certain amount of shots if needed
-        self.w_pct = advanced_stats_data["W_PCT"]
-        self.fga = advanced_stats_data["FGA"]
-        self.fg_pct = advanced_stats_data["FG_PCT"]
-        self.three_pt_fga = advanced_stats_data["FG3A"]
-        self.three_fg_pct = advanced_stats_data["FG3_PCT"]
-        self.fta = advanced_stats_data["FTA"]
-        self.ft_pct = advanced_stats_data["FT_PCT"]
+        self.w_pct = advanced_stats_data["W_PCT"].mean()
+        self.fga = advanced_stats_data["FGA"].mean()
+        self.fg_pct = advanced_stats_data["FG_PCT"].mean()
+        self.three_pt_fga = advanced_stats_data["FG3A"].mean()
+        self.three_fg_pct = advanced_stats_data["FG3_PCT"].mean()
+        self.fta = advanced_stats_data["FTA"].mean()
+        self.ft_pct = advanced_stats_data["FT_PCT"].mean()
 
     def get_player_advanced_stats_deffensive(self, player_id) -> None:
         advanced_stats = playerdashboardbyclutch.PlayerDashboardByClutch(player_id=player_id)
         advanced_stats_data = advanced_stats.get_data_frames()[0]
-        self.steals = advanced_stats_data["STL"]
-        self.blocks = advanced_stats_data["BLK"]
+        self.steals = advanced_stats_data["STL"].mean()
+        self.blocks = advanced_stats_data["BLK"].mean()
     
     def calculate_defensive_clutch(self) -> None:
         self.defensive_elo = 2*(self.steals) + self.blocks
-
     def calculate_offensive_clutch(self) -> None:
         self.offensive_elo = 0.1*(self.w_pct) + 0.5*(self.fg_pct) + 0.2(self.three_fg_pct) + 0.1(self.ft_pct)
-
-
 
 
 
