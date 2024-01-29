@@ -53,6 +53,12 @@ class ClutchData:
     def __init__(self, player_id) -> None:
         self.get_player_advanced_stats_offensive(player_id)
         self.get_player_advanced_stats_deffensive(player_id)
+        self.calculate_defensive_clutch()
+        self.calculate_offensive_clutch()
+        self.calculate_clutch_elo()
+
+    def calculate_clutch_elo(self):
+        self.elo = 0.7*(self.offensive_elo) + 0.3*(self.defensive_elo)
 
     def get_player_advanced_stats_offensive(self, player_id) -> None:
         advanced_stats = playerdashboardbyclutch.PlayerDashboardByClutch(player_id=player_id)
