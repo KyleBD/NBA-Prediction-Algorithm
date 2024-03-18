@@ -1,5 +1,5 @@
 import requests
-
+from gameData import gameData
 # Replace 'YOUR_API_KEY' with your actual API key
 API_KEY = '739cd0db1260420e97dbfb9d12aa5f18'
 
@@ -41,7 +41,11 @@ if odds_response.status_code != 200:
 else:
     odds_json = odds_response.json()
     print('Number of events:', len(odds_json))
-    print(odds_json)
+    event_list = []
+    for event in odds_json:
+        tempGame = gameData(event['home_team'], event['away_team'], event['bookmakers'])
+        event_list.append(tempGame)
+    print(event_list[0].homeTeam)
     # Check the usage quota
     print('Remaining requests', odds_response.headers['x-requests-remaining'])
     print('Used requests', odds_response.headers['x-requests-used'])
