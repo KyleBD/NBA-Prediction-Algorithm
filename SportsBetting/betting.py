@@ -45,9 +45,6 @@ else:
     for event in odds_json:
         tempGame = gameData(event['home_team'], event['away_team'], event['bookmakers'])
         event_list.append(tempGame)
-    books = event_list[0].bookData
-    for book in books:
-        print(book)
     # Check the usage quota
     print('Remaining requests', odds_response.headers['x-requests-remaining'])
     print('Used requests', odds_response.headers['x-requests-used'])
