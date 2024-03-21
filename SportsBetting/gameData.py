@@ -5,6 +5,7 @@ class gameData:
         self.bookData = bookData
         self.get_seperate_books()
         self.get_game_moneyline()
+        print(f"{self.awayTeam} money line is {self.awayTeamML} \n")
         pass
 
     def get_seperate_books(self) -> None:
