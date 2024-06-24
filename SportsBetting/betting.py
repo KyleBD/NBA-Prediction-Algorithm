@@ -22,11 +22,13 @@ sports_response = requests.get(
 )
 
 if sports_response.status_code != 200:
-    print(f'Failed to get sports: status_code {sports_response.status_code}, response body {sports_response.text}')
+    print(sports_response.status_code)
 
 # Now get a list of live & upcoming games for college basketball along with odds
 odds_response = requests.get(
-    f'https://api.the-odds-api.com/v4/sports/{SPORT}/odds',
+    "https://api.the-odds-api.com/v4/sports/"
+    + SPORT
+    + "/odds" ,
     params={
         'api_key': API_KEY,
         'regions': REGIONS,
@@ -37,7 +39,8 @@ odds_response = requests.get(
 )
 
 if odds_response.status_code != 200:
-    print(f'Failed to get odds: status_code {odds_response.status_code}, response body {odds_response.text}')
+    
+    print(odds_response.status_code)
 else:
     odds_json = odds_response.json()
     print('Number of events:', len(odds_json))
