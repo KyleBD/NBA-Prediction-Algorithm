@@ -2,7 +2,7 @@ from oddsapi import OddsApiClient
 
 api_key = '18cd8466443d9a64626ed67081617c07'
 
-
+sports_list = ['americanfootball_nfl', 'basketball_nba', 'icehockey_nhl']
 
 class bettingManager():
     def __init__(self, key):
@@ -17,4 +17,13 @@ class bettingManager():
         print(response.data)
 
     def get_response(self, sport, region, market):
-        ednpoint = '/v3/odds/?apiKey={apiKey}&sport={sport}&region={region}&mkt={mkt}'
+        ednpoint = "/v3/odds/?apiKey=" 
+        + self.key
+        + "&sport=" 
+        + sport 
+        + "&region="
+        + region 
+        + "&mkt=" 
+        + market
+
+
